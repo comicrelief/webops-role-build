@@ -1,5 +1,6 @@
 ---
 - include: checkout.yml
-- include: phing.yml
+- include: dependencies.yml
+- include: tasks.yml
 - include: fixup.yml
 - include: artefact.yml

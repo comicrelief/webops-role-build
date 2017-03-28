@@ -1,0 +1,12 @@
+---
+
+# Task to add apt repos
+# Task to install deps using apt
+# Task to install PHP packages
+# Task to install PHP modules
+# Task to install pip
+# Task to install composer
+# Task to install npm
+# Task to install deps using pip
+# Task to install deps using composer
+# Task to install deps using npm
