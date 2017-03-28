@@ -1,10 +1,11 @@
 ---
 
-- name: Creates tarball
-  archive:
-    path: "{{workdir}}"
-    dest: "/dest/tmp/{{version}}.tar.gz"
-  when: artefact is defined and artefact.type == "tarball"
+# Archive coming in Ansible 2.3
+#- name: Creates tarball
+#  archive:
+#    path: "{{workdir}}"
+#    dest: "/dest/tmp/{{version}}.tar.gz"
+#  when: artefact is defined and artefact.type == "tarball"
 
 # Task to create container when artefact.type = docker
 
