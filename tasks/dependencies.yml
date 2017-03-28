@@ -1,6 +1,19 @@
 ---
 
-# Task to add apt repos
+- name: Add apt repos
+  apt_repository:
+    repo: "{{item}}"
+    update-cache: no
+  with_items: apt_repos
+  when: apt_repos is defined
+  register: update_apt
+
+- name: Update apt cache if necessary
+  apt:
+    update-cache: yes
+    cache_valid_time: 86400
+  when: update_apt is defined and update_apt.changed == True
+
 # Task to install deps using apt
 # Task to install PHP packages
 # Task to install PHP modules
