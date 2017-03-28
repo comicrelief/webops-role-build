@@ -37,46 +37,60 @@
   shell: cat /tmp/composer | php -- --install-dir=/usr/local/bin
   args:
     creates: /usr/local/bin/composer.phar
-  when: composer_packages is defined
+  when: composer == true
 
 - name: rename composer.phar to composer
   shell: mv /usr/local/bin/composer.phar /usr/local/bin/composer
   args:
     creates: /usr/local/bin/composer
-  when: composer_packages is defined
+  when: composer == true
 
 - name: make composer executable
   file:
     path: /usr/local/bin/composer
     mode: a+x
     state: file
-  when: composer_packages is defined
+  when: composer == true
 
 - name: install bundler gem with proper $PATH
   gem:
     name: bundler
     state: latest
     user_install: no
-  when: bundler_packages is defined
+  when: bundler == true
 
 # Task to install npm
+- name: install packages globally using npm
+  npm:
+    name: "{{item}}"
+    state: latest
+    global: latest
+  with_item: npm_system_packages
+  when: npm_system_packages is defined
 
-# Task to install deps using pip
 - name: Install Python modules with pip
   pip:
     name: "{{item}}"
   with_items: pip_packages
   when: pip_packages is defined
 
-# Task to install deps using composer
-- name: Install depencies using composer
+- name: Install dependencies using composer, following composer.lock
   composer:
     command: install
     ignore_platform_reqs: true
     prefer_dist: true
     working_dir: "{{workdir}}" 
-  when: composer_packages is defined
+  when: composer == true
 
-# Task to install deps using bundler
+- name: Install dependencies using bundler, following to Gemfile.lock
+  bundler:
+    state: latest
+    gemfile: "{{bundler_gemfile}}"
+    chdir: "{{workdir}}"
+  when: bundler == true
 
-# Task to install deps using npm
+- name: Install local dependencies using npm, following package.json
+  npm:
+    path: "{{workdir}}"
+    state: present
+  when: npm == true
