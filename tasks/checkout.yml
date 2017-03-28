@@ -1,0 +1,8 @@
+---
+- name: Checkout
+  git:
+    repo: '{{d8_build_repo}}'
+    dest: /srv/checkout
+    depth: 1
+    refspec: '{{d8_build_refspec}}'
+    version: '{{d8_build_version}}'
