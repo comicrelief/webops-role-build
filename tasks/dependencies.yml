@@ -4,7 +4,7 @@
   apt_repository:
     repo: "{{item}}"
     update-cache: no
-  with_items: apt_repos
+  with_items: "{{apt_repos}}"
   when: apt_repos is defined
   register: update_apt
 
@@ -68,11 +68,11 @@
     name: "{{item}}"
     state: latest
     global: latest
-  with_items: npm_system_packages
+  with_items: "{{npm_system_packages}}"
   when: npm_system_packages is defined
 
 - name: install Python modules globally with pip
   pip:
     name: "{{item}}"
-  with_items: pip_packages
+  with_items: "{{pip_packages}}"
   when: pip_packages is defined
