@@ -65,7 +65,7 @@
     name: "{{item}}"
     state: latest
     global: latest
-  with_item: npm_system_packages
+  with_items: npm_system_packages
   when: npm_system_packages is defined
 
 - name: Install Python modules with pip
