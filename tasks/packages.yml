@@ -1,0 +1,22 @@
+---
+
+- name: Install dependencies using composer, following composer.lock
+  composer:
+    command: install
+    ignore_platform_reqs: true
+    prefer_dist: true
+    working_dir: "{{workdir}}" 
+  when: composer == true
+
+- name: Install dependencies using bundler, following to Gemfile.lock
+  bundler:
+    state: latest
+    gemfile: "{{bundler_gemfile}}"
+    chdir: "{{workdir}}"
+  when: bundler == true
+
+- name: Install local dependencies using npm, following package.json
+  npm:
+    path: "{{workdir}}"
+    state: present
+  when: npm == true
