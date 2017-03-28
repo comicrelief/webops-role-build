@@ -2,4 +2,5 @@
 version: master
 workdir: /srv/build/
 post_build_remove: .git
-artefact: tarball
+artefact:
+  type: tarball
