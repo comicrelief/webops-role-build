@@ -1,0 +1,9 @@
+---
+
+- name: Run tasks
+  command: "{{item.command |default(build_default_command)}} {{item.target}}"
+  with_items: build_tasks
+  register: build_tasks_output
+  when: build_tasks is defined
+
+# task to grep task output for failures goes here

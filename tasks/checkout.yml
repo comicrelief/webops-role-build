@@ -1,8 +1,12 @@
 ---
-- name: Checkout
+
+- name: Checkout repo
   git:
-    repo: '{{d8_build_repo}}'
-    dest: /srv/checkout
+    repo: "{{webops_build_repo}}"
+    dest: "{{webops_build_workdir}}"
     depth: 1
-    refspec: '{{d8_build_refspec}}'
-    version: '{{d8_build_version}}'
+    version: "{{webops_build_version}}"
+
+- name: Remove git db
+  file:
+    path: "{{webops_build_workdir}}/.git"

@@ -1,8 +1,0 @@
----
-- name: Run phing tasks
-  command: "{{d8_build_phing}} item"
-  with_items: d8_build_targets
-  register: phing_output
-  when: d8_build_targets is defined
-
-# task to grep phing_output for failures goes here
