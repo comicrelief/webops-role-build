@@ -52,13 +52,15 @@
     state: file
   when: composer_packages is defined
 
-- name: install gems with proper $PATH
+- name: install bundler gem with proper $PATH
   gem:
     name: bundler
     state: latest
     user_install: no
+  when: bundler_packages is defined
 
 # Task to install npm
+
 # Task to install deps using pip
 - name: Install Python modules with pip
   pip:
@@ -67,5 +69,14 @@
   when: pip_packages is defined
 
 # Task to install deps using composer
+- name: Install depencies using composer
+  composer:
+    command: install
+    ignore_platform_reqs: true
+    prefer_dist: true
+    working_dir: "{{workdir}}" 
+  when: composer_packages is defined
+
 # Task to install deps using bundler
+
 # Task to install deps using npm
