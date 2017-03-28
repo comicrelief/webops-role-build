@@ -4,6 +4,5 @@ workdir: /srv/build/
 post_build_remove: .git
 artefact:
   type: tarball
-repo: https://github.com/roryirvine/ansible-role-storage.git
 apt_packages:
   - git
