@@ -40,27 +40,27 @@
   shell: cat /tmp/composer | php -- --install-dir=/usr/local/bin
   args:
     creates: /usr/local/bin/composer.phar
-  when: composer == true
+  when: composer is defined and composer == true
 
 - name: rename composer.phar to composer
   shell: mv /usr/local/bin/composer.phar /usr/local/bin/composer
   args:
     creates: /usr/local/bin/composer
-  when: composer is defined and composer == "true"
+  when: composer is defined and composer == true
 
 - name: make composer executable
   file:
     path: /usr/local/bin/composer
     mode: a+x
     state: file
-  when: composer is defined and composer == "true"
+  when: composer is defined and composer == true
 
 - name: install bundler gem with proper $PATH
   gem:
     name: bundler
     state: latest
     user_install: no
-  when: bundler is defined and bundler == "true"
+  when: bundler is defined and bundler == true
 
 # Task to install npm
 - name: install packages globally using npm

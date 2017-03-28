@@ -5,7 +5,7 @@
     path: "{{item}}"
     state: absent
   with_items: post_build_remove
-  when: post_build_remove exists
+  when: post_build_remove is defined
 
 - name: Creates symlinks
   become_user: deploy
@@ -15,6 +15,6 @@
     state: link
     force: yes
   with_items: post_build_symlinks
-  when: post_build_symlinks exists
+  when: post_build_symlinks is defined
 
 # Add file from template
