@@ -52,7 +52,11 @@
     state: file
   when: composer_packages is defined
 
-# Task to install bundler
+- name: install gems with proper $PATH
+  gem:
+    name: bundler
+    state: latest
+    user_install: no
 
 # Task to install npm
 # Task to install deps using pip
