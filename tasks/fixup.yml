@@ -4,17 +4,17 @@
   file:
     path: "{{item}}"
     state: absent
-  with_items: build_remove
-  when: build_remove exists
+  with_items: post_build_remove
+  when: post_build_remove exists
 
 - name: Creates symlinks
   become_user: deploy
   file:
-    src: "{{webops_build_workdir}/{{item.source}}"
-    dest: "{{webops_build_workdir}/{{item.dest}}"
+    src: "{{workdir}/{{item.source}}"
+    dest: "{{workdir}/{{item.dest}}"
     state: link
     force: yes
-  with_items: build_symlinks
-  when: build_symlinks exists
+  with_items: post_build_symlinks
+  when: post_build_symlinks exists
 
 # Add file from template

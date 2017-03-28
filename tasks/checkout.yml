@@ -2,11 +2,12 @@
 
 - name: Checkout repo
   git:
-    repo: "{{webops_build_repo}}"
-    dest: "{{webops_build_workdir}}"
+    repo: "{{repo}}"
+    dest: "{{workdir}}"
     depth: 1
-    version: "{{webops_build_version}}"
+    version: "{{version}}"
 
+# remove this and rely on a fixup task
 - name: Remove git db
   file:
-    path: "{{webops_build_workdir}}/.git"
+    path: "{{workdir}}/.git"
