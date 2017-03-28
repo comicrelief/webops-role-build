@@ -4,7 +4,7 @@
   archive:
     path: "{{workdir}}"
     dest: "/dest/tmp/{{version}}.tar.gz"
-  when: build_output is defined and build_output == "tarball"
+  when: artefact is defined and artfeact.type == "tarball"
 
 # Task to upload tarball to s3
 
