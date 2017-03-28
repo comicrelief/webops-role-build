@@ -4,8 +4,7 @@
   file:
     path: "{{item}}"
     state: absent
-  with_items: "{{post_build_remove}}"
-  when: post_build_remove is defined
+  with_items: "{{ post_build_remove |default([]) }}"
 
 - name: Creates symlinks
   become_user: deploy
@@ -14,7 +13,6 @@
     dest: "{{workdir}/{{item.dest}}"
     state: link
     force: yes
-  with_items: "{{post_build_symlinks}}"
-  when: post_build_symlinks is defined
+  with_items: "{{ post_build_symlinks |default([]) }}"
 
 # Add files from templates
