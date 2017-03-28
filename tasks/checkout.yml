@@ -6,8 +6,4 @@
     dest: "{{workdir}}"
     depth: 1
     version: "{{version}}"
-
-# remove this and rely on a fixup task
-- name: Remove git db
-  file:
-    path: "{{workdir}}/.git"
+    accept_hostkey: true
