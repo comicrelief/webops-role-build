@@ -4,8 +4,8 @@
   archive:
     path: "{{workdir}}"
     dest: "/dest/tmp/{{version}}.tar.gz"
-  when: artefact is defined and artfeact.type == "tarball"
+  when: artefact is defined and artefact.type == "tarball"
 
-# Task to upload tarball to s3
+# Task to create container when artefact.type = docker
 
-# Task to create container when build_output = docker
+# Task to upload the artefact to s3 when artefact.dest = s3
