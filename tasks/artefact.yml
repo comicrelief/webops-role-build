@@ -1,0 +1,11 @@
+---
+
+- name: Creates tarball
+  archive:
+    path: "{{webops_build_workdir}}"
+    dest: "/dest/tmp/{{webops_build_version}}.tar.gz"
+  when: webops_build_output is defined and webops_build_output == "tarball"
+
+# Task to upload tarball to s3
+
+# Task to create container when build_output = docker
