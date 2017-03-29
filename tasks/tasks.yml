@@ -2,6 +2,8 @@
 
 - name: Run tasks
   shell: "{{item.command |default(default_task_command)}} {{item.target}}"
+  args:
+    chdir: "{{workdir}}"
   with_items: "{{ build_tasks |default([]) }}"
   register: build_tasks_output
 
