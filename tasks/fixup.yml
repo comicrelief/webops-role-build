@@ -9,8 +9,8 @@
 - name: Creates symlinks
   become_user: deploy
   file:
-    src: "{{workdir}/{{item.source}}"
-    dest: "{{workdir}/{{item.dest}}"
+    src: "{{item.source}}"
+    dest: "{{item.dest}}"
     state: link
     force: yes
   with_items: "{{ post_build_symlinks |default([]) }}"
