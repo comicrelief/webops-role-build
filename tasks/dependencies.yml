@@ -104,3 +104,20 @@
   pip:
     name: "{{item}}"
   with_items: "{{ pip_packages |default([]) }}"
+
+- name: Install user-wide Composer packages
+  command: "composer require {{item}}"
+  with_items: "{{ composer_packages |default([]) }}"
+
+- name: Add user-wide Composer packages to the system path
+  become: true
+  lineinfile:
+    dest: /etc/environment
+    state: present
+    regexp: '^PATH='
+    line: "PATH={{ansible_env.PATH}}:{{ansible_user_dir}}/vendor/bin"
+
+- name: Add global Composer packages to Ansible's path
+  setup:
+    filter: ansible_env*
+
