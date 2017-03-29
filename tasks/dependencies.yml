@@ -91,15 +91,16 @@
     state: latest
     user_install: no
 
-# Task to install npm
-- name: install packages globally using npm
+- name: Install packages globally using npm
+  become: true
   npm:
     name: "{{item}}"
     state: latest
     global: latest
   with_items: "{{ npm_system_packages |default([]) }}"
 
-- name: install Python modules globally with pip
+- name: Install Python modules globally with pip
+  become: true
   pip:
     name: "{{item}}"
   with_items: "{{ pip_packages |default([]) }}"
