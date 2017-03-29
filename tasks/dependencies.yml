@@ -40,7 +40,6 @@
 - name: Update apt cache if necessary
   apt:
     update-cache: yes
-    cache_valid_time: 86400
   when: update_apt is defined and update_apt.changed == True
 
 - name: Install apt packages
