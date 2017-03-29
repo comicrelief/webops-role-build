@@ -59,31 +59,30 @@
     global: true
     state: latest
 
-# Task to install composer
-- name: download composer
+- name: Download composer
+  become: true
   get_url:
     url: https://getcomposer.org/installer
     dest: /tmp/composer
-  when: composer_packages is defined
 
-- name: install composer
+- name: Install composer
+  become: true
   shell: cat /tmp/composer | php -- --install-dir=/usr/local/bin
   args:
     creates: /usr/local/bin/composer.phar
-  when: composer is defined and composer == true
 
-- name: rename composer.phar to composer
+- name: Rename composer.phar to composer
+  become: true
   shell: mv /usr/local/bin/composer.phar /usr/local/bin/composer
   args:
     creates: /usr/local/bin/composer
-  when: composer is defined and composer == true
 
-- name: make composer executable
+- name: Make composer executable
+  become: true
   file:
     path: /usr/local/bin/composer
     mode: a+x
     state: file
-  when: composer is defined and composer == true
 
 - name: install bundler gem with proper $PATH
   gem:
