@@ -1,9 +1,24 @@
 ---
 
+- name: Writes CI key into a file
+  lineinfile:
+    dest: /tmp/ci.key
+    line: "{{ ci_key |default() }}"
+    state: present
+    create: yes
+    mode: 0600
+ 
 - name: Checkout repo
   git:
     repo: "{{repo}}"
     dest: "{{workdir}}"
     depth: 1
     version: "{{version}}"
+    key_file: /tmp/ci.key
     accept_hostkey: true
+
+- name: Deletes CI key after use
+  file:
+    path: /tmp/ci.key
+    state: absent
+  when: ci_key is defined
