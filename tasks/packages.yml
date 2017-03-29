@@ -5,18 +5,17 @@
     command: install
     ignore_platform_reqs: true
     prefer_dist: true
-    working_dir: "{{workdir}}"
-  when: composer is defined and composer == true
+    working_dir: "{{ item | default([]) }}"
+  with_items: "{{ composer_local_paths }}"
 
 - name: Install dependencies using bundler, following to Gemfile.lock
   bundler:
-    state: latest
-    gemfile: "{{bundler_gemfile}}"
-    chdir: "{{workdir}}"
-  when: bundler is defined and bundler == true
+    state: present
+    chdir: "{{ item | default([]) }}"
+  with_items: "{{ gem_local_paths }}"
 
 - name: Install local dependencies using npm, following package.json
   npm:
-    path: "{{workdir}}"
+    path: "{{ item | default([]) }}"
     state: present
-  when: npm is defined and npm == true
+  with_items: "{{ npm_local_paths }}"
