@@ -1,5 +1,35 @@
 ---
 
+- name: Add python apt packages
+  become: true
+  apt:
+    name: "{{item}}"
+    update-cache: yes
+    cache_valid_time: 86400
+  with_items:
+    - python-pip
+    - python-dev
+    - libffi-dev
+    - libssl-dev
+
+- name: Install python packages to allow us to validate apt repo keys from SNI-hosted urls
+  become: true
+  pip:
+    name: "{{item}}"
+    state: present
+  with_items:
+    - urllib3
+    - pyopenssl
+    - ndg-httpsclient
+    - pyasn1
+
+- name: Add apt repo keys
+  become: true
+  apt_key:
+    url: "{{item}}"
+    state: present
+  with_items: "{{ apt_repo_keys | default([]) }}"
+
 - name: Add apt repos
   apt_repository:
     repo: "{{item}}"
