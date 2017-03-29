@@ -31,6 +31,7 @@
   with_items: "{{ apt_repo_keys | default([]) }}"
 
 - name: Add apt repos
+  become: true
   apt_repository:
     repo: "{{item}}"
     update-cache: no # do this in a separate step below rather than once for each repo
