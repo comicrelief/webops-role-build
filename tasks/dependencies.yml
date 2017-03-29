@@ -84,12 +84,12 @@
     mode: a+x
     state: file
 
-- name: install bundler gem with proper $PATH
+- name: Install bundler gem with proper $PATH
+  become: true
   gem:
     name: bundler
     state: latest
     user_install: no
-  when: bundler is defined and bundler == true
 
 # Task to install npm
 - name: install packages globally using npm
