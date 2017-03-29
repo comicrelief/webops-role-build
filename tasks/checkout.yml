@@ -2,7 +2,7 @@
 
 - name: Writes CI key into a file
   lineinfile:
-    dest: /tmp/ci.key
+    dest: ~/.ssh/id_rsa
     line: "{{ ci_key |default() }}"
     state: present
     create: yes
@@ -14,11 +14,5 @@
     dest: "{{workdir}}"
     depth: 1
     version: "{{version}}"
-    key_file: /tmp/ci.key
+    key_file: ~/.ssh/id_rsa
     accept_hostkey: true
-
-- name: Deletes CI key after use
-  file:
-    path: /tmp/ci.key
-    state: absent
-  when: ci_key is defined
