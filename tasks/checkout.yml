@@ -7,6 +7,15 @@
     state: present
     create: yes
     mode: 0600
+
+- name: Creates checkout dir
+  become: true
+  file:
+    path: "{{workdir}}"
+    state: directory
+    owner: "{{ansible_user_id}}"
+    group: "{{ansible_user_gid}}"
+    mode: 0755
  
 - name: Checkout repo
   git:
