@@ -5,17 +5,17 @@
     command: install
     ignore_platform_reqs: true
     prefer_dist: true
-    working_dir: "{{ item | default([]) }}"
-  with_items: "{{ composer_local_paths }}"
+    working_dir: "{{ item  }}"
+  with_items: "{{ composer_local_paths | default([]) }}"
 
 - name: Install dependencies using bundler, following to Gemfile.lock
   bundler:
     state: present
-    chdir: "{{ item | default([]) }}"
-  with_items: "{{ gem_local_paths }}"
+    chdir: "{{ item }}"
+  with_items: "{{ gem_local_paths | default([]) }}"
 
 - name: Install local dependencies using npm, following package.json
   npm:
-    path: "{{ item | default([]) }}"
+    path: "{{ item }}"
     state: present
-  with_items: "{{ npm_local_paths }}"
+  with_items: "{{ npm_local_paths | default([]) }}"
