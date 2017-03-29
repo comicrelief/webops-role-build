@@ -97,7 +97,7 @@
     name: "{{item}}"
     state: latest
     global: latest
-  with_items: "{{ npm_system_packages |default([]) }}"
+  with_items: "{{ npm_packages |default([]) }}"
 
 - name: Install Python modules globally with pip
   become: true
