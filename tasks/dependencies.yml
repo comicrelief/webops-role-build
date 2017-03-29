@@ -33,16 +33,18 @@
 - name: Add apt repos
   apt_repository:
     repo: "{{item}}"
-    update-cache: no
+    update-cache: no # do this in a separate step below rather than once for each repo
   with_items: "{{ apt_repos |default([]) }}"
   register: update_apt
 
 - name: Update apt cache if necessary
+  become: true
   apt:
     update-cache: yes
   when: update_apt is defined and update_apt.changed == True
 
 - name: Install apt packages
+  become: true
   apt:
     name: "{{ item }}"
     state: latest
