@@ -15,4 +15,9 @@
     force: yes
   with_items: "{{ post_build_symlinks |default([]) }}"
 
-# Add files from templates
+- name: Creates files needed after the build
+  template:
+    source: "files/{{ item.source |default([]) }}"
+    dest: "{{ item.dest |default([]) }}"
+    mode: "{{ item.mode |default('0644') }}"
+  with_items: "{{ post_build_files }}"

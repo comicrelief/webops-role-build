@@ -20,3 +20,10 @@
   pip:
     name: "{{item}}"
   with_items: "{{ pip_packages |default([]) }}"
+
+- name: Creates files needed before the build
+  template:
+    source: "files/{{ item.source |default([]) }}"
+    dest: "{{ item.dest |default([]) }}"
+    mode: "{{ item.mode |default('0644') }}"
+  with_items: "{{ pre_build_files }}"
