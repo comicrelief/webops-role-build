@@ -1,4 +1,15 @@
 # Ansible Role: Build
+<!-- TOC -->
+
+- [Ansible Role: Build](#ansible-role-build)
+    - [Introduction](#introduction)
+    - [Useful variables](#useful-variables)
+    - [Example playbook](#example-playbook)
+    - [Example vars file](#example-vars-file)
+
+<!-- /TOC -->
+
+## Introduction
 
 Builds a PHP, Ruby, Python, or Nodejs software project using tools such as GNU Make, Phing, Composer, NPM, Rake, Grunt, or shell scripts.
 
