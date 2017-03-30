@@ -24,9 +24,9 @@ the commit id, tag, or branch to build. If a branch is specified, we use the cur
 the working directory, in which the project will be checked out and built
 
     artefact:
-      type: tarball
-      name: "{{ version }}"
-details about the artefact to produce. "type:" can currently be either 'tarball' or 'docker', and pointing 'name:' at the contents of the version var from above is usually the right thing to do.
+      - type: tarball
+        name: "{{ version }}.tar.gz"
+a list of artefacts to produce. "type:" can currently be either 'tarball' or 'docker', and pointing 'name:' at the contents of the version var from above is usually the right thing to do.
 
     ci_key: "{{ lookup('env', 'CI_KEY') }}" 
 the private key needed to access a private git repo with ssh. **DO NOT include this as an unencrypted variable** - either use an ansible secret, or do a lookup from an env var, Consul, or other secure source. 
@@ -75,3 +75,83 @@ a list of files or directories to be removed after the build has run
       - to:
         from:
 a list of symlinks to create after the build has run. The value of 'to:' is where the symlink points to, and should usuall be in the form of a relative path.  
+
+---
+## Example playbook
+
+    - hosts: all
+      roles:
+        - webops-role-build
+      vars_files:
+        - config/build_public.yml
+      gather_facts: False # For compatibility with newer Linux distributions without python 2
+      pre_tasks:
+      - name: Install python 2
+        raw: "test -e /usr/bin/python || (sudo apt-get -q -y update && sudo apt-get -q install -y python-minimal)"
+      - name: Gather Facts # Resume Ansible fact-gathering from here
+        setup:	
+
+## Example vars file
+*(Used to build our rnd17 tarball for deployment to production)*
+
+    version: 1.29.1
+    repo: git@github.com:github/testrepo.git # replaces the real repo for documentation purposes
+    ci_key: "{{ lookup('env', 'CI_KEY') }}"
+    artefact:
+      type: tarball
+      name: "{{ version }}.tar.gz"
+    default_task_command: phing -S
+    build_tasks:
+    - target: /usr/bin/nodejs /usr/bin/node
+      command: "[ -h /usr/bin/node ] || /bin/ln -s" # phing expects 'nodejs' to be called 'node'
+    - target: "'drush.bin = {{ansible_user_dir}}/vendor/bin/drush' > build.properties"
+      command: /bin/echo
+    - target: build:prepare:deploy
+    - target: grunt:build
+    post_build_remove: .git
+    post_build_symlinks:
+    - source: ../sites
+      dest: web/sites
+    - source: ../modules
+      dest: web/modules
+    - source: ../themes
+      dest: web/themes
+    - source: ../pinterest-742e7.html
+      dest: web/pinterest-742e7.html
+    - source: ../../cr
+      dest: web/profiles/cr
+    apt_repos:
+      - ppa:brightbox/ruby-ng
+      - deb https://deb.nodesource.com/node_6.x trusty main
+      - ppa:ondrej/php
+    apt_repo_keys:
+      - https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+      - https://packages.sury.org/php/apt.gpg
+    apt_packages:
+      - nodejs
+      - ruby2.1
+      - ruby2.1-dev # needed for json gem
+      - php5.6
+      - php5.6-dev
+      - php5.6-cli
+      - php5.6-xml
+      - php5.6-json
+      - php5.6-mbstring
+      - php5.6-bcmath
+      - php-amqp
+    needs_gem: true
+    needs_composer: true
+    needs_npm: true
+    needs_pip: false
+    gem_packages:
+      - bundler
+    composer_packages:
+      - drush/drush:8.1
+      - phing/phing:2.15.0
+    system_apt_packages:
+      - git
+      - unzip
+      - python-setuptools # needed to install pip
+      - build-essential
+      - checkinstall
+      - libpcre3-dev
