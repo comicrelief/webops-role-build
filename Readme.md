@@ -1,11 +1,10 @@
-# Ansible Role: Build
+
 <!-- TOC -->
 
-- [Ansible Role: Build](#ansible-role-build)
-    - [Introduction](#introduction)
-    - [Useful variables](#useful-variables)
-    - [Example playbook](#example-playbook)
-    - [Example vars file](#example-vars-file)
+- [Introduction](#introduction)
+- [Useful variables](#useful-variables)
+- [Example playbook](#example-playbook)
+- [Example vars file](#example-vars-file)
 
 <!-- /TOC -->
 
