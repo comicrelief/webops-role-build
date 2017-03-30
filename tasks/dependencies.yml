@@ -1,73 +1,5 @@
 ---
 
-- name: Add initial dependencies needed to add apt repos and keys
-  become: true
-  apt:
-    name: "{{item}}"
-    update-cache: yes
-    cache_valid_time: 86400
-  with_items:
-    - python-pip
-    - python-dev
-    - libffi-dev
-    - libssl-dev
-    - software-properties-common
-    - python-software-properties
-    - apt-transport-https
-
-- name: Install python packages to allow us to validate apt repo keys from SNI-hosted urls
-  become: true
-  pip:
-    name: "{{item}}"
-    state: present
-  with_items:
-    - urllib3
-    - pyopenssl
-    - ndg-httpsclient
-    - pyasn1
-
-- name: Add apt repo keys
-  become: true
-  apt_key:
-    url: "{{item}}"
-    state: present
-  with_items: "{{ apt_repo_keys | default([]) }}"
-
-- name: Add apt repos (Ubuntu)
-  become: true
-  apt_repository:
-    repo: "{{item}}"
-    update-cache: no # do this in a separate step below rather than once for each repo
-  with_items: "{{ apt_repos |default([]) }}"
-  register: update_apt
-  when: ansible_distribution == 'Ubuntu'
-
-- name: Add apt repos (Debian)
-  become: true
-  apt_repository:
-    repo: "{{item}}"
-    update-cache: no # do this in a separate step below rather than once for each repo
-    codename: xenial # use Xenial repos if Debian-specific ones aren't avaiable - needs Ansible 2.3
-  with_items: "{{ apt_repos |default([]) }}"
-  register: update_apt
-  when: ansible_distribution == 'Debian'
-
-- name: Update apt cache if necessary
-  become: true
-  apt:
-    update-cache: yes
-  when: update_apt is defined and update_apt.changed == True
-
-- name: Install apt packages
-  become: true
-  apt:
-    name: "{{ item }}"
-    state: latest
-    default_release: "{{ansible_distribution_release}}" # Prefer the release's version
-    update-cache: yes
-    cache_valid_time: 86400
-  with_items: "{{ apt_packages |default([]) }}"
-
 - name: Update npm
   become: true
   npm:
@@ -105,7 +37,7 @@
     path: "/usr/bin/{{item}}"
   with_items:
     - ruby
-    - gem 
+    - gem
   register: rs
 
 - name: Find the highest installed ruby and gem versions
