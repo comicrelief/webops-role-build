@@ -14,21 +14,21 @@ All dependencies should be explicitly declared, and the *molecule* test script c
 ## Useful variables
 *(Role defaults, used for testing, are noted when appropriate)*
 
-    repo: git@github.com:github/testrepo.git
+    repo:
 the url of a git repo, in either https or ssh format
 
-    version: master
+    version:
 the commit id, tag, or branch to build. If a branch is specified, we use the current HEAD
 
-    workdir: /srv/build
+    workdir:
 the working directory, in which the project will be checked out and built
 
     artefact:
-      - type: tarball
-        name: "{{ version }}.tar.gz"
+      - type:
+        name:
 a list of artefacts to produce. "type:" can currently be either 'tarball' or 'docker', and pointing 'name:' at the contents of the version var from above is usually the right thing to do.
 
-    ci_key: "{{ lookup('env', 'CI_KEY') }}" 
+    ci_key: 
 the private key needed to access a private git repo with ssh. **DO NOT include this as an unencrypted variable** - either use an ansible secret, or do a lookup from an env var, Consul, or other secure source. 
 
     build_tasks:
@@ -96,6 +96,7 @@ a list of symlinks to create after the build has run. The value of 'to:' is wher
 
     version: 1.29.1
     repo: git@github.com:github/testrepo.git # replaces the real repo for documentation purposes
+    workdir: /srv/build
     ci_key: "{{ lookup('env', 'CI_KEY') }}"
     artefact:
       type: tarball
