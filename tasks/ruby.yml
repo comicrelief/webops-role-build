@@ -1,0 +1,36 @@
+---
+
+- name: Check if /usr/bin/ruby and /usr/bin/gem exist
+  stat:
+    path: "/usr/bin/{{item}}"
+  with_items:
+    - ruby
+    - gem
+  register: rs
+
+- name: Find the highest installed ruby and gem versions
+  shell: "ls -tr /usr/bin/ | grep -e '^{{item}}' | grep -Eo '[0-9.]{1,7}' |sort -n |tail -1"
+  register: rv
+  with_items:
+    - ruby
+    - gem
+
+# This horrendous thing avoids the need to have a separate set tasks for each of ruby and gem
+- name: Create /usr/bin/ruby and /usr/bin/gem links if needed
+  become: true
+  file:
+    src: "{{item.0.invocation.module_args.path}}{{item.1.stdout}}"
+    dest: "{{item.0.invocation.module_args.path}}"
+    state: link
+  with_together:
+    - "{{rs.results}}"
+    - "{{rv.results}}"
+  when: item.0.stat.exists == False
+
+- name: Install system-wide gems
+  become: true
+  gem:
+    name: "{{ item |default([]) }}"
+    state: latest
+    user_install: no
+  with_items: gem_packages
