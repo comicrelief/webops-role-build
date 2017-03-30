@@ -12,7 +12,6 @@ All dependencies should be explicitly declared, and the *molecule* test script c
 
 ---
 ## Useful variables
-*(Role defaults, used for testing, are noted when appropriate)*
 
     repo:
 the url of a git repo, in either https or ssh format
