@@ -26,7 +26,7 @@
 
 - name: Creates files needed before the build
   template:
-    source: "files/{{ item.source |default([]) }}"
-    dest: "{{ item.dest |default([]) }}"
+    source: "files/{{ item.source }}"
+    dest: "{{ item.dest }}"
     mode: "{{ item.mode |default('0644') }}"
-  with_items: "{{ pre_build_files }}"
+  with_items: "{{ pre_build_files |default([]) }}"

@@ -17,7 +17,7 @@
 
 - name: Creates files needed after the build
   template:
-    source: "files/{{ item.source |default([]) }}"
-    dest: "{{ item.dest |default([]) }}"
+    source: "files/{{ item.source }}"
+    dest: "{{ item.dest }}"
     mode: "{{ item.mode |default('0644') }}"
-  with_items: "{{ post_build_files }}"
+  with_items: "{{ post_build_files |default([]) }}"
