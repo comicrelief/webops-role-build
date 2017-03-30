@@ -1,0 +1,41 @@
+---
+
+- name: Download composer
+  become: true
+  get_url:
+    url: https://getcomposer.org/installer
+    dest: /tmp/composer
+
+- name: Install composer
+  become: true
+  shell: cat /tmp/composer | php -- --install-dir=/usr/local/bin
+  args:
+    creates: /usr/local/bin/composer.phar
+
+- name: Rename composer.phar to composer
+  become: true
+  shell: mv /usr/local/bin/composer.phar /usr/local/bin/composer
+  args:
+    creates: /usr/local/bin/composer
+
+- name: Make composer executable
+  become: true
+  file:
+    path: /usr/local/bin/composer
+    mode: a+x
+    state: file
+
+- name: Install user-wide Composer packages
+  command: "composer require {{item}}"
+  with_items: "{{ composer_packages |default([]) }}"
+
+- name: Add user-wide Composer packages to the system path
+  become: true
+  lineinfile:
+    dest: /etc/environment
+    state: present
+    regexp: '^PATH='
+    line: "PATH={{ansible_env.PATH}}:{{ansible_user_dir}}/vendor/bin"
+
+- name: Add global Composer packages to Ansible's path
+  setup:
