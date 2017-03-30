@@ -6,6 +6,7 @@
     name: npm
     global: true
     state: latest
+  when: needs_npm == True
 
 - name: Install packages globally using npm
   become: true
@@ -14,12 +15,14 @@
     state: latest
     global: true
   with_items: "{{ npm_packages |default([]) }}"
+  when: needs_npm == True
 
 - name: Install Python modules globally with pip
   become: true
   pip:
     name: "{{item}}"
   with_items: "{{ pip_packages |default([]) }}"
+  when: needs_pip == True
 
 - name: Creates files needed before the build
   template:
