@@ -5,6 +5,7 @@
 - include: php-deps.yml
   when: needs_composer == True
 - include: dependencies.yml
+- include: pre-build.yml
 - include: checkout.yml
 - include: post-checkout.yml
 - include: tasks.yml
