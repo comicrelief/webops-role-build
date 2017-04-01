@@ -2,7 +2,7 @@
 
 - name: Creates files needed post-checkout
   template:
-    source: "files/{{ item.source }}"
+    src: "files/{{ item.source }}"
     dest: "{{ item.dest }}"
     mode: "{{ item.mode |default('0644') }}"
   with_items: "{{ post_checkout_files |default([]) }}"
