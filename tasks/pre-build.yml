@@ -9,7 +9,6 @@
 
 - name: Run pre-build tasks
   shell: "{{item}}"
-  args:
   with_items: "{{ pre_build_commands |default([]) }}"
   register: pre_build_tasks_output
 
