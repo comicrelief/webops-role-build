@@ -9,6 +9,5 @@
 
 - name: Display stderr from failing build tasks
   debug:
-  debug:
     msg: "{{ item.stderr_lines }}"
   with_items: "{{ build_tasks_output.results |selectattr('stderr_lines') |list |default([]) }}"
