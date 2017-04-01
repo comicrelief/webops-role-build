@@ -1,12 +1,12 @@
 ---
 
-- name: Writes CI key into a file
-  lineinfile:
+- name: Copies private key
+  copy:
     dest: ~/.ssh/id_rsa
-    line: "{{ ci_key |default() }}"
+    content: "{{ ci_key |default() }}"
     state: present
     create: yes
-    mode: 0600
+    mode: 0400
 
 - name: Creates checkout dir
   become: true
