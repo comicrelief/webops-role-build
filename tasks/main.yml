@@ -4,5 +4,5 @@
 - include: checkout.yml
 - include: post-checkout.yml
 - include: tasks.yml
-- include: fixup.yml
+- include: post-build.yml
 - include: artefact.yml
