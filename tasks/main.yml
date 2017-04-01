@@ -6,7 +6,7 @@
   when: needs_composer == True
 - include: dependencies.yml
 - include: checkout.yml
-- include: packages.yml
+- include: post-checkout.yml
 - include: tasks.yml
 - include: fixup.yml
 - include: artefact.yml
