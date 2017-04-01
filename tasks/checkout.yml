@@ -4,7 +4,6 @@
   copy:
     dest: ~/.ssh/id_rsa
     content: "{{ ci_key |default() }}"
-    create: yes
     mode: 0400
 
 - name: Creates checkout dir
