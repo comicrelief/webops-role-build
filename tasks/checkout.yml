@@ -4,7 +4,6 @@
   copy:
     dest: ~/.ssh/id_rsa
     content: "{{ ci_key |default() }}"
-    state: present
     create: yes
     mode: 0400
 
