@@ -1,0 +1,7 @@
+---
+
+- name: Install Python modules globally with pip
+  become: true
+  pip:
+    name: "{{item}}"
+  with_items: "{{ pip_packages |default([]) }}"

@@ -4,7 +4,10 @@
   when: needs_gem == True
 - include: php-deps.yml
   when: needs_composer == True
-- include: dependencies.yml
+- include: nodejs-deps.yml
+  when: needs_npm == True
+- include: python-deps.yml
+  when: needs_pip == True
 - include: pre-build.yml
 - include: checkout.yml
 - include: post-checkout.yml

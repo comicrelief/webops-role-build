@@ -1,0 +1,18 @@
+---
+
+- name: Update npm
+  become: true
+  npm:
+    name: npm
+    global: true
+    state: latest
+  when: needs_npm == True
+
+- name: Install packages globally using npm
+  become: true
+  npm:
+    name: "{{item}}"
+    state: latest
+    global: true
+  with_items: "{{ npm_packages |default([]) }}"
+  when: needs_npm == True
