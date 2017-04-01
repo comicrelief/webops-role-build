@@ -1,0 +1,10 @@
+---
+- include: apt-deps.yml
+- include: ruby-deps.yml
+  when: needs_gem == True
+- include: php-deps.yml
+  when: needs_composer == True
+- include: nodejs-deps.yml
+  when: needs_npm == True
+- include: python-deps.yml
+  when: needs_pip == True
