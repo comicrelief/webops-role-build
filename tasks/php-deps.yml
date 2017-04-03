@@ -1,8 +1,8 @@
 ---
 
-- name: Check if Composer is installed.
+- name: Check if Composer is installed
   stat: 
-    path: "{{ composer_path }}"
+    path: /usr/local/bin/composer
   register: cs
 
 - name: Download composer

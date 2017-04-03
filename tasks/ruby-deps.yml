@@ -14,7 +14,7 @@
   with_items:
     - ruby
     - gem
-  when: not (rs.ruby.stat.exists and rs.gem.stat.exists)
+  when: not (rs.results.0.stat.exists and rs.results.1.stat.exists)
 
 # This horrendous thing avoids the need to have a separate set tasks for each of ruby and gem
 - name: Create /usr/bin/ruby and /usr/bin/gem links if needed
