@@ -41,6 +41,5 @@
 
 - name: Install system-wide Composer packages
   command: "composer global require {{item}}"
-  args:
-    creates: ~/.composer/composer.json
   with_items: "{{ composer_packages |default([]) }}"
+  when: not ansible_check_mode # not sure how we'd check idempotence of multiple packages
