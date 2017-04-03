@@ -12,6 +12,8 @@
     content: "{{ ci_key |default() }}"
     mode: 0400
     force: no # don't overwrite if it already exists
+  no_log: true
+  when: ci_key is defined and ci_key
 
 - name: Creates checkout dir
   become: true
