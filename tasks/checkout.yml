@@ -30,5 +30,4 @@
     dest: "{{workdir}}"
     depth: 1
     version: "{{version}}"
-    key_file: ~/.ssh/id_rsa
     accept_hostkey: true
