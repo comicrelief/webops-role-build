@@ -1,11 +1,17 @@
 ---
 
+- name: Ensures that the ~/.ssh directory exists
+  file:
+    path: ~/.ssh
+    mode: 0700
+    state: directory
+
 - name: Copies private key if needed
   copy:
     dest: ~/.ssh/id_rsa
     content: "{{ ci_key |default() }}"
     mode: 0400
-  when: ci_key is defined and ci_key
+    force: no # don't overwrite if it already exists
 
 - name: Creates checkout dir
   become: true
