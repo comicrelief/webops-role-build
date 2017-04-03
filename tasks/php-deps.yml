@@ -25,6 +25,9 @@
     mode: a+x
     state: file
 
+- name: Configures Composer
+  command: "composer config --global bin-dir '/usr/local/bin'"
+
 - name: Install system-wide Composer packages
-  command: "composer config --global bin-dir '/usr/local/bin'; composer require {{item}}"
+  command: "composer global require {{item}}"
   with_items: "{{ composer_packages |default([]) }}"
