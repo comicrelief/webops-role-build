@@ -1,10 +1,11 @@
 ---
 
-- name: Copies private key
+- name: Copies private key if needed
   copy:
     dest: ~/.ssh/id_rsa
     content: "{{ ci_key |default() }}"
     mode: 0400
+  when: ci_key is defined and ci_key
 
 - name: Creates checkout dir
   become: true
