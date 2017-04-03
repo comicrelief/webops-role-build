@@ -25,17 +25,6 @@
     mode: a+x
     state: file
 
-- name: Install user-wide Composer packages
-  command: "composer require {{item}}"
+- name: Install system-wide Composer packages
+  command: "composer config --global bin-dir '/usr/local/bin'; composer require {{item}}"
   with_items: "{{ composer_packages |default([]) }}"
-
-- name: Add user-wide Composer packages to the system path
-  become: true
-  lineinfile:
-    dest: /etc/environment
-    state: present
-    regexp: '^PATH='
-    line: "PATH={{ansible_env.PATH}}:{{ansible_user_dir}}/vendor/bin"
-
-- name: Add global Composer packages to Ansible's path
-  setup:
