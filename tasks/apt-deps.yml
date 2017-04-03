@@ -13,7 +13,12 @@
     - libssl-dev
     - software-properties-common
     - python-software-properties
+    - python-setuptools
     - apt-transport-https
+
+- name: Install pip
+  easy_install:
+    name: pip
 
 - name: Install python packages to allow us to validate apt repo keys from SNI-hosted urls
   become: true
@@ -25,6 +30,7 @@
     - pyopenssl
     - ndg-httpsclient
     - pyasn1
+  when: ansible_distribution_release != "xenial"
 
 - name: Add apt repo keys
   become: true
