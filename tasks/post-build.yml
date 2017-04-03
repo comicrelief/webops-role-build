@@ -7,7 +7,6 @@
   with_items: "{{ post_build_remove |default([]) }}"
 
 - name: Creates symlinks
-  become_user: deploy
   file:
     src: "{{item.source}}"
     dest: "{{item.dest}}"
