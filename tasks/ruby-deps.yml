@@ -14,6 +14,7 @@
   with_items:
     - ruby
     - gem
+  when: not (rs.ruby.stat.exists and rs.gem.stat.exists)
 
 # This horrendous thing avoids the need to have a separate set tasks for each of ruby and gem
 - name: Create /usr/bin/ruby and /usr/bin/gem links if needed
@@ -25,7 +26,7 @@
   with_together:
     - "{{rs.results}}"
     - "{{rv.results}}"
-  when: item.0.stat.exists == False
+  when: not item.0.stat.exists
 
 - name: Install system-wide gems
   become: true

@@ -6,7 +6,6 @@
     name: npm
     global: true
     state: latest
-  when: needs_npm == True
 
 - name: Install packages globally using npm
   become: true
@@ -15,4 +14,3 @@
     state: latest
     global: true
   with_items: "{{ npm_packages |default([]) }}"
-  when: needs_npm == True

@@ -1,22 +1,30 @@
 ---
 
+- name: Check if Composer is installed.
+  stat: 
+    path: "{{ composer_path }}"
+  register: cs
+
 - name: Download composer
   become: true
   get_url:
     url: https://getcomposer.org/installer
     dest: /tmp/composer
+  when: not cs.stat.exists
 
 - name: Install composer
   become: true
   shell: cat /tmp/composer | php -- --install-dir=/usr/local/bin
   args:
     creates: /usr/local/bin/composer.phar
+  when: not cs.stat.exists
 
 - name: Rename composer.phar to composer
   become: true
   shell: mv /usr/local/bin/composer.phar /usr/local/bin/composer
   args:
     creates: /usr/local/bin/composer
+  when: not cs.stat.exists
 
 - name: Make composer executable
   become: true
@@ -24,10 +32,15 @@
     path: /usr/local/bin/composer
     mode: a+x
     state: file
+  when: not cs.stat.exists
 
-- name: Configures Composer
+- name: Configures Composer global mode
   command: "composer config --global bin-dir '/usr/local/bin'"
+  args:
+    creates: ~/.composer/config.json
 
 - name: Install system-wide Composer packages
   command: "composer global require {{item}}"
+  args:
+    creates: ~/.composer/composer.json
   with_items: "{{ composer_packages |default([]) }}"
