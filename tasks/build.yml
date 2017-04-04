@@ -18,6 +18,7 @@
   args:
     chdir: "{{workdir}}"
     creates: "/var/log/{{item.command |escape}}_{{item.target |escape}}_stdout"
+    executable: /bin/bash
   with_items: "{{ build_tasks |default([]) }}"
   register: build_tasks_output
 
