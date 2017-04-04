@@ -3,7 +3,7 @@
 - include: pre-build.yml
 - include: checkout.yml
 - include: post-checkout.yml
-- include: tasks.yml
+- include: build.yml
   when: not ansible_check_mode
 - include: post-build.yml
 - include: artefact.yml
