@@ -8,13 +8,13 @@
 # - first, we use exec to manipulate our file descriptors (see http://www.tldp.org/LDP/abs/html/io-redirection.html)
 # - we use tee to send messages to a file as well as output in the normal way for ansible to collect and process
 # - to do this create a new descriptor (3), so that we can have separate logfiles for both stdout and stderr (idea taken from http://stackoverflow.com/a/19279694)
-# - we use the output of item.cmd in the filename - this is fantastically ugly, but it is at least unique to the command being run without containing any non-repeatable elements such as dates or times
+# - we concatenate the command and target to form the log filenames - this is ugly, but it does at least produces something unique to the command being run without containing any non-repeatable elements such as dates or times
 # - to avoid issues from all the redirection elements, we pass these through jinja2's "escape" filter - it's designed to make things html-safe rather than bash-safe so makes the log name even uglier, but it still serves our purpose well enough
 # - next, we use the "creates:" argument to test whether the stdout file exists - this helps us achieve idempotence even when running non-idempotent build systems such as phing
 # - finally, we register an ansible var with the output, which we might use in the future
 
 - name: Run tasks
-  shell: "exec 3>&1; exec > >(tee -a /var/log/{{item.cmd |escape}}_stdout >/dev/null) 2> >(tee -a /var/log/stderr_{{item.cmd |escape}}_stderr >&3); {{item.command |default(default_task_command)}} {{item.target}}"
+  shell: "exec 3>&1; exec > >(tee -a /var/log/{{item.command |escape}}_{{item.targe |escape}}_stdout >/dev/null) 2> >(tee -a /var/log/stderr_{{item.command |escape}}_{{item.targe |escape}}_stderr >&3); {{item.command |default(default_task_command)}} {{item.target}}"
   args:
     chdir: "{{workdir}}"
     creates: "/var/log/stdout_{{item.cmd |escape}}"
