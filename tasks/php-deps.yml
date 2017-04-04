@@ -1,7 +1,7 @@
 ---
 
 - name: Check if Composer is installed
-  stat: 
+  stat:
     path: /usr/local/bin/composer
   register: cs
 
