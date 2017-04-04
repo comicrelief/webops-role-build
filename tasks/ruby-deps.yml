@@ -27,6 +27,7 @@
     - "{{rs.results}}"
     - "{{rv.results}}"
   when: not item.0.stat.exists
+  no_log: true # produces lots of unreadable gibberish otherwise
 
 - name: Install system-wide gems
   become: true
