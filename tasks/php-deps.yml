@@ -37,7 +37,7 @@
 - name: Configures Composer global mode
   command: "composer config --global bin-dir '/usr/local/bin'"
   args:
-    creates: ~/.composer/config.json
+    creates: "~/.composer/config.json"
 
 - name: Install system-wide Composer packages
   command: "composer global require {{item}}"
