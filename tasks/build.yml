@@ -8,17 +8,17 @@
 # - first, we use exec to manipulate our file descriptors (see http://www.tldp.org/LDP/abs/html/io-redirection.html)
 # - we use tee to send messages to a file as well as output in the normal way for ansible to collect and process
 # - to do this create a new descriptor (3), so that we can have separate logfiles for both stdout and stderr (idea taken from http://stackoverflow.com/a/19279694)
-# - we concatenate the command and target to form the log filenames - this is ugly, but it does at least produces something unique to the command being run without containing any non-repeatable elements such as dates or times
-# - to avoid issues from all the redirection elements, we pass these through jinja2's "escape" filter - it's designed to make things html-safe rather than bash-safe so makes the log name even uglier, but it still serves our purpose well enough
+# - we concatenate the command and target to form the log filenames and then strip out any non-filesystem-safe elements.
+# - yes, this is ugly, but it does at least produces something unique to the command being run without containing any non-repeatable elements such as dates or times
 # - we also touch the stdout logfile, to cover cases where no stdout was produced!
 # - next, we use the "creates:" argument to test whether the stdout file exists - this helps us achieve idempotence even when running non-idempotent build systems such as phing
 # - finally, we register an ansible var with the output, which we might use in the future
 
 - name: Run tasks
-  shell: "exec 3>&1; exec > >(tee -a /var/log/{{item.command |default(default_task_command) |regex_escape}}_{{item.target |default(default_task_command) |regex_escape}}_stdout >/dev/null) 2> >(tee -a /var/log/{{item.command |default(default_task_command) |regex_escape}}_{{item.target |default(default_task_command) |regex_escape}}_stderr >&3); {{item.command |default(default_task_command)}} {{item.target}}; touch /var/log/{{item.command |default(default_task_command) |regex_escape}}_{{item.target |default(default_task_command) |regex_escape}}_stdout"
+  shell: "exec 3>&1; exec > >(tee -a /var/log/stdout_{{item.command |default(default_task_command) |regex_replace('[^A-Za-z0-9._]*','') }}_{{item.target |default(default_task_command) |regex_replace('[^A-Za-z0-9._]*','') }} >/dev/null) 2> >(tee -a /var/log/stderr_{{item.command |default(default_task_command) |regex_replace('[^A-Za-z0-9._]*','') }}_{{item.target |default(default_task_command) |regex_replace('[^A-Za-z0-9._]*','') }} >&3); {{item.command |default(default_task_command) }} {{item.target}}; touch /var/log/stdout_{{item.command |default(default_task_command) |regex_replace('[^A-Za-z0-9._]*','') }}_{{item.target |default(default_task_command) |regex_replace('[^A-Za-z0-9._]*','') }}"
   args:
     chdir: "{{workdir}}"
-    creates: "/var/log/{{item.command |default(default_task_command) |regex_escape}}_{{item.target |default(default_task_command) |regex_escape}}_stdout"
+    creates: "/var/log/stdout_{{item.command |default(default_task_command) |regex_replace('[^A-Za-z0-9._]*','_') }}_{{item.target |default(default_task_command) |regex_replace('[^A-Za-z0-9._]*','_') }}"
     executable: /bin/bash
   with_items: "{{ build_tasks |default([]) }}"
   register: build_tasks_output
