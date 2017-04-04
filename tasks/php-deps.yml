@@ -42,4 +42,5 @@
 - name: Install system-wide Composer packages
   command: "composer global require {{item}}"
   with_items: "{{ composer_packages |default([]) }}"
-  when: not ansible_check_mode # not sure how we'd check idempotence of multiple packages
+  changed_when: false # composer makes idempotence difficult, so let's fake it
+  when: not ansible_check_mode # no need to do this if we're not actually going to run the build tasks

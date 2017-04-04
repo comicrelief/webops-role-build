@@ -4,6 +4,6 @@
 - include: checkout.yml
 - include: post-checkout.yml
 - include: build.yml
-  when: not ansible_check_mode
+  when: not ansible_check_mode # let's not run the whole build if we're just checking the role / playbook
 - include: post-build.yml
 - include: artefact.yml
