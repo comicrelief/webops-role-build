@@ -14,10 +14,10 @@
 # - finally, we register an ansible var with the output, which we might use in the future
 
 - name: Run tasks
-  shell: "exec 3>&1; exec > >(tee -a /var/log/{{item.command |escape}}_{{item.targe |escape}}_stdout >/dev/null) 2> >(tee -a /var/log/stderr_{{item.command |escape}}_{{item.targe |escape}}_stderr >&3); {{item.command |default(default_task_command)}} {{item.target}}"
+  shell: "exec 3>&1; exec > >(tee -a /var/log/{{item.command |escape}}_{{item.target |escape}}_stdout >/dev/null) 2> >(tee -a /var/log/stderr_{{item.command |escape}}_{{item.target |escape}}_stderr >&3); {{item.command |default(default_task_command)}} {{item.target}}"
   args:
     chdir: "{{workdir}}"
-    creates: "/var/log/stdout_{{item.cmd |escape}}"
+    creates: "/var/log/{{item.command |escape}}_{{item.target |escape}}_stdout"
   with_items: "{{ build_tasks |default([]) }}"
   register: build_tasks_output
 
