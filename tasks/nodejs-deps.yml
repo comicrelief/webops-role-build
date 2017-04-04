@@ -5,14 +5,14 @@
   npm:
     name: npm
     global: true
-    state: latest
-  changed_when: false # we need 'state: latest' to upgrade from ancient versions of npm that might come in from apt packages, but this breaks idempotence - so let's fake it for now
+    version: "{{needs_npm}}"
+#  changed_when: false # we need 'state: latest' to upgrade from ancient versions of npm that might come in from apt packages, but this breaks idempotence - so let's fake it for now
 
 - name: Install packages globally using npm
   become: true
   npm:
-    name: "{{item}}"
-    state: latest
+    name: "{{item.package}}"
+    version: "{{item.version}}"
     global: true
-  changed_when: false # same thing here
+#  changed_when: false # same thing here
   with_items: "{{ npm_packages |default([]) }}"

@@ -5,6 +5,6 @@
 - include: php-deps.yml
   when: needs_composer == True
 - include: nodejs-deps.yml
-  when: needs_npm == True and not ansible_check_mode # no need to do this if we're not actually going to run the build tasks
+  when: needs_npm and not ansible_check_mode # no need to do this if we're not actually going to run the build tasks
 - include: python-deps.yml
   when: needs_pip == True
