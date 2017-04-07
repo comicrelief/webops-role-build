@@ -15,7 +15,12 @@
 # - finally, we register an ansible var with the output, which we might use in the future
 
 - name: Run tasks
-  shell: "exec 3>&1; exec > >(tee -a /var/log/stdout_{{item.command |default(default_task_command) |regex_replace('[^A-Za-z0-9._]*','') }}_{{item.target |default(default_task_command) |regex_replace('[^A-Za-z0-9._]*','') }} >/dev/null) 2> >(tee -a /var/log/stderr_{{item.command |default(default_task_command) |regex_replace('[^A-Za-z0-9._]*','') }}_{{item.target |default(default_task_command) |regex_replace('[^A-Za-z0-9._]*','') }} >&3); {{item.command |default(default_task_command) }} {{item.target}}; touch /var/log/stdout_{{item.command |default(default_task_command) |regex_replace('[^A-Za-z0-9._]*','') }}_{{item.target |default(default_task_command) |regex_replace('[^A-Za-z0-9._]*','') }}"
+  shell: >
+    "exec 3>&1;
+     exec > >(tee -a /var/log/stdout_{{item.command |default(default_task_command) |regex_replace('[^A-Za-z0-9._]*','') }}_{{item.target |default(default_task_command) |regex_replace('[^A-Za-z0-9._]*','') }}>/dev/null)
+     2> >(tee -a /var/log/stderr_{{item.command |default(default_task_command) |regex_replace('[^A-Za-z0-9._]*','') }}_{{item.target |default(default_task_command) |regex_replace('[^A-Za-z0-9._]*','') }} >&3);
+     {{item.command |default(default_task_command) }} {{item.target}};
+     touch /var/log/stdout_{{item.command |default(default_task_command) |regex_replace('[^A-Za-z0-9._]*','') }}_{{item.target |default(default_task_command) |regex_replace('[^A-Za-z0-9._]*','') }}"
   args:
     chdir: "{{workdir}}"
     creates: "/var/log/stdout_{{item.command |default(default_task_command) |regex_replace('[^A-Za-z0-9._]*','') }}_{{item.target |default(default_task_command) |regex_replace('[^A-Za-z0-9._]*','') }}"
