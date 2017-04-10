@@ -20,7 +20,7 @@
 - name: Create /usr/bin/ruby and /usr/bin/gem links if needed
   become: true
   file:
-    src: "{{item.0.invocation.module_args.path}}{{item.1.stdout}}"
+    src: "{{item.0.invocation.module_args.path}}{{item.1.stdout}}" # invocation.module_args.path lets us access the path we tried to stat in the task above
     dest: "{{item.0.invocation.module_args.path}}"
     state: link
   with_together:
